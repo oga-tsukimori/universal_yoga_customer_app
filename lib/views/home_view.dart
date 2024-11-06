@@ -15,10 +15,17 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Yoga Courses'),
+        title: const Text(
+          'Yoga Courses',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.pink,
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
+            icon: const Icon(
+              Icons.search,
+              color: Colors.white,
+            ),
             onPressed: () {
               showSearch(context: context, delegate: CourseSearchDelegate());
             },
@@ -48,7 +55,8 @@ class HomeView extends StatelessWidget {
         onPressed: () {
           courseController.addDummyData();
         },
-        child: const Icon(Icons.add),
+        backgroundColor: Colors.pink,
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
@@ -68,6 +76,7 @@ class CourseCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.all(10),
+      color: Colors.pink[50],
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -75,13 +84,17 @@ class CourseCard extends StatelessWidget {
           children: [
             Text(
               course.description,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.pink,
+              ),
             ),
             const SizedBox(height: 10),
             if (courseClasses.isNotEmpty) ...[
               Text(
                 'From: ${courseClasses.first.date.split('T').first} - To: ${courseClasses.last.date.split('T').first} (${course.duration} minutes)',
-                style: const TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16, color: Colors.pink),
               ),
               const SizedBox(height: 10),
               ...courseClasses.map((classInstance) {
@@ -93,8 +106,11 @@ class CourseCard extends StatelessWidget {
               const SizedBox(height: 10),
               Text(
                 'Special Sales... \$${course.price} Only per member!',
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.pink,
+                ),
               ),
               const SizedBox(height: 10),
               Row(
@@ -105,7 +121,7 @@ class CourseCard extends StatelessWidget {
                       // Add to Cart functionality
                     },
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.blue,
+                      foregroundColor: Colors.pink,
                       backgroundColor: Colors.white,
                     ),
                     child: const Text('Add to Cart'),
@@ -116,14 +132,19 @@ class CourseCard extends StatelessWidget {
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,
-                      backgroundColor: Colors.blue,
+                      backgroundColor: Colors.pink,
                     ),
                     child: const Text('Book Now'),
                   ),
                 ],
               ),
             ] else ...[
-              const Center(child: Text('No classes available')),
+              const Center(
+                child: Text(
+                  'No classes available',
+                  style: TextStyle(color: Colors.pink),
+                ),
+              ),
             ],
           ],
         ),
@@ -143,6 +164,7 @@ class ClassCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 5),
+      color: Colors.pink[100],
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -150,21 +172,32 @@ class ClassCard extends StatelessWidget {
           children: [
             Text(
               classInstance.name,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.pink,
+              ),
             ),
             const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Tr. ${classInstance.teacher}'),
+                Text(
+                  'Tr. ${classInstance.teacher}',
+                  style: const TextStyle(color: Colors.pink),
+                ),
                 Row(
                   children: [
-                    Text(classInstance.date.split('T').first),
+                    Text(
+                      classInstance.date.split('T').first,
+                      style: const TextStyle(color: Colors.pink),
+                    ),
                     const SizedBox(width: 10),
                     Text(
                       DateFormat.jm().format(
                         DateTime.parse(classInstance.date),
                       ),
+                      style: const TextStyle(color: Colors.pink),
                     ),
                   ],
                 )
@@ -227,6 +260,7 @@ class CourseSearchDelegate extends SearchDelegate {
                     courseController.courseClasses[course.id] ?? [];
                 return Card(
                   margin: const EdgeInsets.all(10),
+                  color: Colors.pink[50],
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -235,18 +269,23 @@ class CourseSearchDelegate extends SearchDelegate {
                         Text(
                           course.description,
                           style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.pink,
+                          ),
                         ),
                         const SizedBox(height: 10),
                         if (courseClasses.isNotEmpty) ...[
                           Text(
                             'From: ${courseClasses.first.date.split('T').first} - To: ${courseClasses.last.date.split('T').first} (${course.duration} minutes)',
-                            style: const TextStyle(fontSize: 16),
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.pink),
                           ),
                           const SizedBox(height: 10),
                           ...courseClasses.map((classInstance) {
                             return Card(
                               margin: const EdgeInsets.symmetric(vertical: 5),
+                              color: Colors.pink[100],
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
@@ -255,14 +294,26 @@ class CourseSearchDelegate extends SearchDelegate {
                                     Text(
                                       'Class: ${classInstance.name}',
                                       style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.pink,
+                                      ),
                                     ),
-                                    Text('Teacher: ${classInstance.teacher}'),
                                     Text(
-                                        'Date: ${classInstance.date.split('T').first}'),
+                                      'Teacher: ${classInstance.teacher}',
+                                      style:
+                                          const TextStyle(color: Colors.pink),
+                                    ),
                                     Text(
-                                        'Time: ${classInstance.date.split('T').last.split('.').first}'),
+                                      'Date: ${classInstance.date.split('T').first}',
+                                      style:
+                                          const TextStyle(color: Colors.pink),
+                                    ),
+                                    Text(
+                                      'Time: ${classInstance.date.split('T').last.split('.').first}',
+                                      style:
+                                          const TextStyle(color: Colors.pink),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -272,7 +323,9 @@ class CourseSearchDelegate extends SearchDelegate {
                           Text(
                             'Special Sales... \$${course.price} Only per member!',
                             style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.pink),
                           ),
                           const SizedBox(height: 10),
                           Row(
@@ -283,7 +336,7 @@ class CourseSearchDelegate extends SearchDelegate {
                                   // Add to Cart functionality
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  foregroundColor: Colors.blue,
+                                  foregroundColor: Colors.pink,
                                   backgroundColor: Colors.white,
                                 ),
                                 child: const Text('Add to Cart'),
@@ -294,14 +347,19 @@ class CourseSearchDelegate extends SearchDelegate {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   foregroundColor: Colors.white,
-                                  backgroundColor: Colors.blue,
+                                  backgroundColor: Colors.pink,
                                 ),
                                 child: const Text('Book Now'),
                               ),
                             ],
                           ),
                         ] else ...[
-                          const Center(child: Text('No classes available')),
+                          const Center(
+                            child: Text(
+                              'No classes available',
+                              style: TextStyle(color: Colors.pink),
+                            ),
+                          ),
                         ],
                       ],
                     ),
