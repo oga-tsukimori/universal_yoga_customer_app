@@ -1,47 +1,35 @@
-// models/class_model.dart
-class YogaClass {
+// models/class_instance_model.dart
+class Class {
   String id;
-  String day;
-  String time;
-  int capacity;
-  int duration;
-  double price;
-  String type;
-  String description;
+  String courseId;
+  String date;
+  String teacher;
+  String name;
 
-  YogaClass({
+  Class({
     required this.id,
-    required this.day,
-    required this.time,
-    required this.capacity,
-    required this.duration,
-    required this.price,
-    required this.type,
-    this.description = '',
+    required this.courseId,
+    required this.date,
+    required this.teacher,
+    this.name = '',
   });
 
-  factory YogaClass.fromMap(Map<String, dynamic> data, String id) {
-    return YogaClass(
+  factory Class.fromMap(Map<String, dynamic> data, String id) {
+    return Class(
       id: id,
-      day: data['day'],
-      time: data['time'],
-      capacity: data['capacity'],
-      duration: data['duration'],
-      price: data['price'],
-      type: data['type'],
-      description: data['description'] ?? '',
+      courseId: data['courseId'],
+      name: data['name'] ?? '',
+      date: data['date'],
+      teacher: data['teacher'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'day': day,
-      'time': time,
-      'capacity': capacity,
-      'duration': duration,
-      'price': price,
-      'type': type,
-      'description': description,
+      'courseId': courseId,
+      'name': name,
+      'date': date,
+      'teacher': teacher,
     };
   }
 }

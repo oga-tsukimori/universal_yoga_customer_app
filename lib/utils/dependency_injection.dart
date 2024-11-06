@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
-import '../controllers/class_controller.dart';
+import '../controllers/course_controller.dart';
 
 class DependencyInjection {
   static void init() {
-    Get.lazyPut(() => ClassController());
+    Get.lazyPut(() => CourseController());
   }
 }
