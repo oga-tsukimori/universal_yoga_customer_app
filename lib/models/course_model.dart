@@ -43,4 +43,9 @@ class Course {
       'description': description,
     };
   }
+
+  @override
+  String toString() {
+    return 'Course{id: $id, day: $day, time: $time, capacity: $capacity, duration: $duration, price: $price, type: $type, description: $description}';
+  }
 }
