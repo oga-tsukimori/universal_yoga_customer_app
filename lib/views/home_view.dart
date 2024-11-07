@@ -115,6 +115,12 @@ class HomeViewState extends State<HomeView> {
         selectedItemColor: Colors.pink,
         onTap: _onItemTapped,
       ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     courseController.addDummyData();
+      //   },
+      //   child: const Icon(Icons.add),
+      // ),
     );
   }
 }

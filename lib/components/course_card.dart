@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../controllers/course_controller.dart';
 import '../models/class_model.dart';
 import '../models/course_model.dart';
+import '../pages/booking_page.dart';
 import 'class_card.dart';
 
 class CourseCard extends StatelessWidget {
@@ -76,27 +77,11 @@ class CourseCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: (!isInCart && !isCourseInCart)
-                          ? () {
-                              courseController.addToCart(course);
-                              Get.snackbar(
-                                'Course Added',
-                                '${course.description} has been added to your cart.',
-                                snackPosition: SnackPosition.BOTTOM,
-                                backgroundColor: Colors.green,
-                                colorText: Colors.white,
-                              );
-                            }
-                          : () {
-                              courseController.removeFromCart(course);
-                              Get.snackbar(
-                                'Course Removed',
-                                '${course.description} has been removed from your cart.',
-                                snackPosition: SnackPosition.BOTTOM,
-                                backgroundColor: Colors.red,
-                                colorText: Colors.white,
-                              );
-                            },
+                      onPressed: () {
+                        (!isInCart && !isCourseInCart)
+                            ? courseController.addToCart(course)
+                            : courseController.removeFromCart(course);
+                      },
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.pink,
                         backgroundColor: Colors.white,
@@ -112,7 +97,7 @@ class CourseCard extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 28),
                         child: ElevatedButton(
                           onPressed: () {
-                            // Book Now functionality
+                            Get.to(() => BookingPage());
                           },
                           style: ElevatedButton.styleFrom(
                             foregroundColor: Colors.white,

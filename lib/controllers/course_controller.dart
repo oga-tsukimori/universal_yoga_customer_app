@@ -1,4 +1,5 @@
 // controllers/course_controller.dart
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:math';
@@ -72,11 +73,49 @@ class CourseController extends GetxController {
   void addToCart(Course course) {
     if (!cart.contains(course)) {
       cart.add(course);
+      Get.snackbar(
+        'Course Added',
+        '${course.description} has been added to your cart.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
     }
   }
 
   void removeFromCart(Course course) {
     cart.remove(course);
+    Get.snackbar(
+      'Course Removed',
+      '${course.description} has been removed from your cart.',
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.red,
+      colorText: Colors.white,
+    );
+  }
+
+  Future<void> confirmBooking({
+    required String name,
+    required String email,
+    required String phone,
+  }) async {
+    await _firestore.collection('users').add({
+      'name': name,
+      'email': email,
+      'phone': phone,
+      'courses': cart.map((course) => course.id).toList(),
+    });
+
+    Get.snackbar(
+      'Success',
+      'Booking confirmed!',
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.green,
+      colorText: Colors.white,
+    );
+
+    cart.clear();
+    Get.back();
   }
 
   void addDummyData() async {
