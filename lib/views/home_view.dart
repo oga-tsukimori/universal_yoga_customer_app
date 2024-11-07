@@ -34,37 +34,67 @@ class HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          _selectedIndex == 0
-              ? 'Yoga Courses'
-              : _selectedIndex == 1
-                  ? 'Your Cart'
-                  : 'Your Courses',
-          style: const TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Colors.pink,
-        actions: _selectedIndex == 0
-            ? [
-                Obx(() {
-                  return IconButton(
-                    icon: Icon(
-                      Icons.search,
-                      color: courseController.isLoading.value
-                          ? Colors.grey
-                          : Colors.white,
-                    ),
-                    onPressed: courseController.isLoading.value
-                        ? null
-                        : () {
-                            showSearch(
-                                context: context,
-                                delegate: CourseSearchDelegate());
-                          },
-                  );
-                }),
-              ]
-            : null,
-      ),
+          title: Text(
+            _selectedIndex == 0
+                ? 'Yoga Courses'
+                : _selectedIndex == 1
+                    ? 'Your Cart'
+                    : 'Your Courses',
+            style: const TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.pink,
+          actions: [
+            IconButton(
+              icon: Stack(
+                children: [
+                  const Icon(
+                    Icons.shopping_cart,
+                    color: Colors.white,
+                  ),
+                  Positioned(
+                    right: 0,
+                    child: Obx(() {
+                      return CircleAvatar(
+                        radius: 8,
+                        backgroundColor: Colors.red,
+                        child: Text(
+                          '${courseController.cart.length}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                ],
+              ),
+              onPressed: () {
+                setState(() {
+                  _selectedIndex = 1; // Navigate to the cart page
+                });
+              },
+            ),
+            _selectedIndex == 0
+                ? Obx(() {
+                    return IconButton(
+                      icon: Icon(
+                        Icons.search,
+                        color: courseController.isLoading.value
+                            ? Colors.grey
+                            : Colors.white,
+                      ),
+                      onPressed: courseController.isLoading.value
+                          ? null
+                          : () {
+                              showSearch(
+                                  context: context,
+                                  delegate: CourseSearchDelegate());
+                            },
+                    );
+                  })
+                : Container(),
+          ]),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

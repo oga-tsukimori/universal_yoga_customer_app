@@ -76,11 +76,27 @@ class CourseCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: () {
-                        (!isInCart && !isCourseInCart)
-                            ? courseController.addToCart(course)
-                            : courseController.removeFromCart(course);
-                      },
+                      onPressed: (!isInCart && !isCourseInCart)
+                          ? () {
+                              courseController.addToCart(course);
+                              Get.snackbar(
+                                'Course Added',
+                                '${course.description} has been added to your cart.',
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: Colors.green,
+                                colorText: Colors.white,
+                              );
+                            }
+                          : () {
+                              courseController.removeFromCart(course);
+                              Get.snackbar(
+                                'Course Removed',
+                                '${course.description} has been removed from your cart.',
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: Colors.red,
+                                colorText: Colors.white,
+                              );
+                            },
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.pink,
                         backgroundColor: Colors.white,
