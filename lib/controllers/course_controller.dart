@@ -11,47 +11,45 @@ class CourseController extends GetxController {
   var courseClasses =
       <String, List<Class>>{}.obs; // Map to store classes for each course
   var isLoading = false.obs;
+  var searchResults = <Course>[].obs;
 
   @override
   void onInit() {
     super.onInit();
-    fetchCourses();
+    fetchCoursesAndClasses();
   }
 
-  void fetchCourses() async {
+  void fetchCoursesAndClasses() async {
     isLoading.value = true;
     var courseSnapshot = await _firestore.collection('courses').get();
     var courseList = courseSnapshot.docs
         .map((doc) => Course.fromMap(doc.data(), doc.id))
         .toList();
     courses.assignAll(courseList);
+
+    for (var course in courseList) {
+      var classSnapshot = await _firestore
+          .collection('classes')
+          .where('courseId', isEqualTo: course.id)
+          .get();
+      var classList = classSnapshot.docs
+          .map((doc) => Class.fromMap(doc.data(), doc.id))
+          .toList();
+      courseClasses[course.id] = classList;
+    }
+
     isLoading.value = false;
   }
 
-  void fetchClasses(String courseId) async {
-    isLoading.value = true;
-    var classSnapshot = await _firestore
-        .collection('classes')
-        .where('courseId', isEqualTo: courseId)
-        .get();
-    var classList = classSnapshot.docs
-        .map((doc) => Class.fromMap(doc.data(), doc.id))
-        .toList();
-    courseClasses[courseId] = classList;
-    isLoading.value = false;
-  }
-
-  Future<void> searchCourses(String query) async {
-    isLoading.value = true;
-    var snapshot = await _firestore
-        .collection('courses')
-        .where('type', isGreaterThanOrEqualTo: query)
-        .where('type', isLessThanOrEqualTo: '$query\uf8ff')
-        .get();
-    var courseList =
-        snapshot.docs.map((doc) => Course.fromMap(doc.data(), doc.id)).toList();
-    courses.assignAll(courseList);
-    isLoading.value = false;
+  void searchCourses(String query) {
+    if (query.isEmpty) {
+      searchResults.assignAll(courses);
+    } else {
+      var filteredCourses = courses.where((course) {
+        return course.type.toLowerCase().contains(query.toLowerCase());
+      }).toList();
+      searchResults.assignAll(filteredCourses);
+    }
   }
 
   void addDummyData() async {
@@ -113,6 +111,6 @@ class CourseController extends GetxController {
       }
     }
 
-    fetchCourses(); // Refresh the course list
+    fetchCoursesAndClasses(); // Refresh the course and class list
   }
 }
