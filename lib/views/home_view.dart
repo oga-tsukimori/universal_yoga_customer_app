@@ -90,7 +90,16 @@ class CourseCard extends StatelessWidget {
             const SizedBox(height: 10),
             if (courseClasses.isNotEmpty) ...[
               Text(
-                'From: ${courseClasses.first.date.split('T').first} - To: ${courseClasses.last.date.split('T').first} (${course.duration} minutes)',
+                'Every ${course.day}!',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.pink,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                '${courseClasses.first.date.split('T').first} - ${courseClasses.last.date.split('T').first} (${course.duration} minutes)',
                 style: const TextStyle(fontSize: 16, color: Colors.pink),
               ),
               const SizedBox(height: 10),
