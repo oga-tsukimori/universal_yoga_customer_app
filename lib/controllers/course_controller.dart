@@ -13,7 +13,7 @@ class CourseController extends GetxController {
   var isLoading = false.obs;
   var searchResults = <Course>[].obs;
   var cart = <Course>[].obs;
-  var yourCourses = <Course>[].obs;
+  var myCourses = <Course>[].obs;
 
   @override
   void onInit() {

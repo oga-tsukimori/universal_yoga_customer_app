@@ -1,25 +1,27 @@
 // views/home_view.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../components/course_card.dart';
 import '../components/course_search_delegate.dart';
 import '../controllers/course_controller.dart';
+import '../pages/cart_page.dart';
+import '../pages/my_courses.dart';
+import '../pages/yoga_courses_page.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   @override
-  _HomeViewState createState() => _HomeViewState();
+  HomeViewState createState() => HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class HomeViewState extends State<HomeView> {
   final CourseController courseController = Get.find();
   int _selectedIndex = 0;
 
   static final List<Widget> _pages = <Widget>[
     YogaCoursesPage(),
     CartPage(),
-    YourCoursesPage(),
+    MyCoursesPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -72,11 +74,11 @@ class _HomeViewState extends State<HomeView> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
-            label: 'Your Cart',
+            label: 'My Cart',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.book),
-            label: 'Your Courses',
+            label: 'My Courses',
           ),
         ],
         currentIndex: _selectedIndex,
@@ -84,81 +86,5 @@ class _HomeViewState extends State<HomeView> {
         onTap: _onItemTapped,
       ),
     );
-  }
-}
-
-class YogaCoursesPage extends StatelessWidget {
-  final CourseController courseController = Get.find();
-
-  YogaCoursesPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() {
-      if (courseController.isLoading.value) {
-        return const Center(child: CircularProgressIndicator());
-      }
-      if (courseController.courses.isEmpty) {
-        return const Center(child: Text('No courses available.'));
-      }
-      return ListView.builder(
-        itemCount: courseController.courses.length,
-        itemBuilder: (context, index) {
-          var course = courseController.courses[index];
-          var courseClasses = courseController.courseClasses[course.id] ?? [];
-          return CourseCard(course: course, courseClasses: courseClasses);
-        },
-      );
-    });
-  }
-}
-
-class CartPage extends StatelessWidget {
-  final CourseController courseController = Get.find();
-
-  CartPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() {
-      if (courseController.cart.isEmpty) {
-        return const Center(child: Text('Your cart is empty.'));
-      }
-      return ListView.builder(
-        itemCount: courseController.cart.length,
-        itemBuilder: (context, index) {
-          var course = courseController.cart[index];
-          var courseClasses = courseController.courseClasses[course.id] ?? [];
-          return CourseCard(
-            course: course,
-            courseClasses: courseClasses,
-            isInCart: true,
-          );
-        },
-      );
-    });
-  }
-}
-
-class YourCoursesPage extends StatelessWidget {
-  final CourseController courseController = Get.find();
-
-  YourCoursesPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() {
-      if (courseController.yourCourses.isEmpty) {
-        return const Center(child: Text('You have no courses.'));
-      }
-      return ListView.builder(
-        itemCount: courseController.yourCourses.length,
-        itemBuilder: (context, index) {
-          var course = courseController.yourCourses[index];
-          var courseClasses = courseController.courseClasses[course.id] ?? [];
-          return CourseCard(course: course, courseClasses: courseClasses);
-        },
-      );
-    });
   }
 }
