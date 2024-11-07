@@ -46,7 +46,16 @@ class CourseController extends GetxController {
       searchResults.assignAll(courses);
     } else {
       var filteredCourses = courses.where((course) {
-        return course.type.toLowerCase().contains(query.toLowerCase());
+        var matchesCourse =
+            course.type.toLowerCase().contains(query.toLowerCase()) ||
+                course.description.toLowerCase().contains(query.toLowerCase());
+        var matchesClass = courseClasses[course.id]?.any((classInstance) {
+              return classInstance.teacher
+                  .toLowerCase()
+                  .contains(query.toLowerCase());
+            }) ??
+            false;
+        return matchesCourse || matchesClass;
       }).toList();
       searchResults.assignAll(filteredCourses);
     }
