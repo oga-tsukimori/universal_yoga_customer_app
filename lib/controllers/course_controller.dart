@@ -12,6 +12,8 @@ class CourseController extends GetxController {
       <String, List<Class>>{}.obs; // Map to store classes for each course
   var isLoading = false.obs;
   var searchResults = <Course>[].obs;
+  var cart = <Course>[].obs;
+  var yourCourses = <Course>[].obs;
 
   @override
   void onInit() {
@@ -64,6 +66,12 @@ class CourseController extends GetxController {
         return matchesCourse || matchesClass;
       }).toList();
       searchResults.assignAll(filteredCourses);
+    }
+  }
+
+  void addToCart(Course course) {
+    if (!cart.contains(course)) {
+      cart.add(course);
     }
   }
 

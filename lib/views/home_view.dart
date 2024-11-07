@@ -1,285 +1,164 @@
 // views/home_view.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:universal_yoga_customer_app/models/class_model.dart';
-import 'package:universal_yoga_customer_app/models/course_model.dart';
+import '../components/course_card.dart';
+import '../components/course_search_delegate.dart';
 import '../controllers/course_controller.dart';
-import 'package:intl/intl.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
+  const HomeView({super.key});
+
+  @override
+  _HomeViewState createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
   final CourseController courseController = Get.find();
+  int _selectedIndex = 0;
 
-  HomeView({super.key});
+  static final List<Widget> _pages = <Widget>[
+    YogaCoursesPage(),
+    CartPage(),
+    YourCoursesPage(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Yoga Courses',
-          style: TextStyle(color: Colors.white),
+        title: Text(
+          _selectedIndex == 0
+              ? 'Yoga Courses'
+              : _selectedIndex == 1
+                  ? 'Your Cart'
+                  : 'Your Courses',
+          style: const TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.pink,
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.search,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              showSearch(context: context, delegate: CourseSearchDelegate());
-            },
+        actions: _selectedIndex == 0
+            ? [
+                Obx(() {
+                  return IconButton(
+                    icon: Icon(
+                      Icons.search,
+                      color: courseController.isLoading.value
+                          ? Colors.grey
+                          : Colors.white,
+                    ),
+                    onPressed: courseController.isLoading.value
+                        ? null
+                        : () {
+                            showSearch(
+                                context: context,
+                                delegate: CourseSearchDelegate());
+                          },
+                  );
+                }),
+              ]
+            : null,
+      ),
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.fitness_center),
+            label: 'Yoga Courses',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Your Cart',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book),
+            label: 'Your Courses',
           ),
         ],
-      ),
-      body: Obx(() {
-        if (courseController.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (courseController.courses.isEmpty) {
-          return const Center(child: Text('No courses available.'));
-        }
-        return ListView.builder(
-          itemCount: courseController.courses.length,
-          itemBuilder: (context, index) {
-            var course = courseController.courses[index];
-            var courseClasses = courseController.courseClasses[course.id] ?? [];
-            return CourseCard(course: course, courseClasses: courseClasses);
-          },
-        );
-      }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          courseController.addDummyData();
-        },
-        backgroundColor: Colors.pink,
-        child: const Icon(Icons.add, color: Colors.white),
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.pink,
+        onTap: _onItemTapped,
       ),
     );
   }
 }
 
-class CourseCard extends StatelessWidget {
-  const CourseCard({
-    super.key,
-    required this.course,
-    required this.courseClasses,
-  });
-
-  final Course course;
-  final List<Class> courseClasses;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(10),
-      color: Colors.pink[50],
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              course.description,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.pink,
-              ),
-            ),
-            const SizedBox(height: 10),
-            if (courseClasses.isNotEmpty) ...[
-              Text(
-                'Every ${course.day}!',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.pink,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                '${courseClasses.first.date.split('T').first} - ${courseClasses.last.date.split('T').first} (${course.duration} minutes)',
-                style: const TextStyle(fontSize: 16, color: Colors.pink),
-              ),
-              const SizedBox(height: 10),
-              ...courseClasses.map((classInstance) {
-                return SizedBox(
-                  width: double.infinity,
-                  child: ClassCard(classInstance: classInstance),
-                );
-              }),
-              const SizedBox(height: 10),
-              Text(
-                'Special Sales... \$${course.price} Only per member!',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.pink,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      // Add to Cart functionality
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.pink,
-                      backgroundColor: Colors.white,
-                    ),
-                    child: const Text('Add to Cart'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Book Now functionality
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.pink,
-                    ),
-                    child: const Text('Book Now'),
-                  ),
-                ],
-              ),
-            ] else ...[
-              const Center(
-                child: Text(
-                  'No classes available',
-                  style: TextStyle(color: Colors.pink),
-                ),
-              ),
-            ],
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ClassCard extends StatelessWidget {
-  final Class classInstance;
-  const ClassCard({
-    super.key,
-    required this.classInstance,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 5),
-      color: Colors.pink[100],
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              classInstance.name,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.pink,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Tr. ${classInstance.teacher}',
-                  style: const TextStyle(color: Colors.pink),
-                ),
-                Row(
-                  children: [
-                    Text(
-                      classInstance.date.split('T').first,
-                      style: const TextStyle(color: Colors.pink),
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      DateFormat.jm().format(
-                        DateTime.parse(classInstance.date),
-                      ),
-                      style: const TextStyle(color: Colors.pink),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class CourseSearchDelegate extends SearchDelegate {
+class YogaCoursesPage extends StatelessWidget {
   final CourseController courseController = Get.find();
 
+  YogaCoursesPage({super.key});
+
   @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-        icon: const Icon(Icons.clear),
-        onPressed: () {
-          query = '';
-          courseController.searchResults.clear();
+  Widget build(BuildContext context) {
+    return Obx(() {
+      if (courseController.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      if (courseController.courses.isEmpty) {
+        return const Center(child: Text('No courses available.'));
+      }
+      return ListView.builder(
+        itemCount: courseController.courses.length,
+        itemBuilder: (context, index) {
+          var course = courseController.courses[index];
+          var courseClasses = courseController.courseClasses[course.id] ?? [];
+          return CourseCard(course: course, courseClasses: courseClasses);
         },
-      ),
-    ];
+      );
+    });
   }
+}
+
+class CartPage extends StatelessWidget {
+  final CourseController courseController = Get.find();
+
+  CartPage({super.key});
 
   @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.arrow_back),
-      onPressed: () {
-        close(context, null);
-      },
-    );
+  Widget build(BuildContext context) {
+    return Obx(() {
+      if (courseController.cart.isEmpty) {
+        return const Center(child: Text('Your cart is empty.'));
+      }
+      return ListView.builder(
+        itemCount: courseController.cart.length,
+        itemBuilder: (context, index) {
+          var course = courseController.cart[index];
+          var courseClasses = courseController.courseClasses[course.id] ?? [];
+          return CourseCard(
+            course: course,
+            courseClasses: courseClasses,
+            isInCart: true,
+          );
+        },
+      );
+    });
   }
+}
+
+class YourCoursesPage extends StatelessWidget {
+  final CourseController courseController = Get.find();
+
+  YourCoursesPage({super.key});
 
   @override
-  Widget buildResults(BuildContext context) {
-    courseController.searchCourses(query);
-    if (courseController.isLoading.value) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    if (courseController.searchResults.isEmpty) {
-      return const Center(child: Text('No courses found.'));
-    }
-    return ListView.builder(
-      itemCount: courseController.searchResults.length,
-      itemBuilder: (context, index) {
-        var course = courseController.searchResults[index];
-        var courseClasses = courseController.courseClasses[course.id] ?? [];
-        return CourseCard(course: course, courseClasses: courseClasses);
-      },
-    );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    if (query.isEmpty) {
-      return const Center(child: Text('Search for courses'));
-    }
-    courseController.searchCourses(query);
-    if (courseController.isLoading.value) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    if (courseController.searchResults.isEmpty) {
-      return const Center(child: Text('No courses found.'));
-    }
-    return ListView.builder(
-      itemCount: courseController.searchResults.length,
-      itemBuilder: (context, index) {
-        var course = courseController.searchResults[index];
-        var courseClasses = courseController.courseClasses[course.id] ?? [];
-        return CourseCard(course: course, courseClasses: courseClasses);
-      },
-    );
+  Widget build(BuildContext context) {
+    return Obx(() {
+      if (courseController.yourCourses.isEmpty) {
+        return const Center(child: Text('You have no courses.'));
+      }
+      return ListView.builder(
+        itemCount: courseController.yourCourses.length,
+        itemBuilder: (context, index) {
+          var course = courseController.yourCourses[index];
+          var courseClasses = courseController.courseClasses[course.id] ?? [];
+          return CourseCard(course: course, courseClasses: courseClasses);
+        },
+      );
+    });
   }
 }
