@@ -75,6 +75,10 @@ class CourseController extends GetxController {
     }
   }
 
+  void removeFromCart(Course course) {
+    cart.remove(course);
+  }
+
   void addDummyData() async {
     var random = Random();
     var days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];

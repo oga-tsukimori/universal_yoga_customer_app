@@ -20,6 +20,7 @@ class CourseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CourseController courseController = Get.find();
+    final bool isCourseInCart = courseController.cart.contains(course);
 
     return Card(
       margin: const EdgeInsets.all(10),
@@ -69,28 +70,41 @@ class CourseCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              if (!isInCart)
-                ElevatedButton(
-                  onPressed: () {
-                    courseController.addToCart(course);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.pink,
-                    backgroundColor: Colors.white,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      (!isInCart && !isCourseInCart)
+                          ? courseController.addToCart(course)
+                          : courseController.removeFromCart(course);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.pink,
+                      backgroundColor: Colors.white,
+                    ),
+                    child: Text(
+                      (!isInCart && !isCourseInCart)
+                          ? 'Add to Cart'
+                          : 'Remove from Cart',
+                    ),
                   ),
-                  child: const Text('Add to Cart'),
-                ),
-              if (isInCart)
-                ElevatedButton(
-                  onPressed: () {
-                    // Book Now functionality
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.pink,
-                  ),
-                  child: const Text('Book Now'),
-                ),
+                  if (isInCart || isCourseInCart)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 28),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Book Now functionality
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.pink,
+                        ),
+                        child: const Text('Book Now'),
+                      ),
+                    ),
+                ],
+              )
             ] else ...[
               const Center(
                 child: Text(
