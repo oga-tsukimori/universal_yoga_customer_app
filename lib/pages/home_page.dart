@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../components/course_search_delegate.dart';
 import '../controllers/course_controller.dart';
-import '../pages/cart_page.dart';
-import '../pages/my_courses.dart';
-import '../pages/yoga_courses_page.dart';
+import 'cart_page.dart';
+import 'my_courses_page.dart';
+import 'yoga_courses_page.dart';
 
-class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  HomeViewState createState() => HomeViewState();
+  HomePageState createState() => HomePageState();
 }
 
-class HomeViewState extends State<HomeView> {
+class HomePageState extends State<HomePage> {
   final CourseController courseController = Get.find();
   int _selectedIndex = 0;
 
