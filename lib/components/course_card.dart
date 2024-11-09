@@ -6,6 +6,29 @@ import '../models/course_model.dart';
 import '../pages/booking_page.dart';
 import 'class_card.dart';
 
+// A widget that displays a card containing information about a course and its associated classes.
+//
+// The [CourseCard] widget is a stateless widget that takes in a [Course] object, a list of [Class] objects,
+// and a boolean indicating whether the course is in the cart. It displays the course description,
+// schedule, duration, price, and a list of class cards. It also provides buttons to add/remove the
+// course from the cart and to navigate to the booking page.
+//
+// The widget uses the GetX package for state management and navigation.
+//
+// Parameters:
+// - [course]: The [Course] object containing information about the course.
+// - [courseClasses]: A list of [Class] objects associated with the course.
+// - [isInCart]: A boolean indicating whether the course is in the cart. Defaults to false.
+//
+// Example usage:
+// ```dart
+// CourseCard(
+//   course: myCourse,
+//   courseClasses: myCourseClasses,
+//   isInCart: true,
+// )
+// ```
+
 class CourseCard extends StatelessWidget {
   const CourseCard({
     super.key,

@@ -3,7 +3,10 @@ import 'package:get/get.dart';
 import '../controllers/course_controller.dart';
 
 class BookingPage extends StatelessWidget {
+  // Initialize the CourseController using GetX
   final CourseController courseController = Get.find();
+
+  // Controllers for the text fields
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -16,7 +19,7 @@ class BookingPage extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.of(context).pop(), // Navigate back
         ),
         title: const Text(
           'Booking Confirmation',
@@ -38,6 +41,7 @@ class BookingPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
+            // Display the list of courses in the cart
             Expanded(
               child: Obx(() {
                 return ListView.builder(
@@ -76,6 +80,7 @@ class BookingPage extends StatelessWidget {
               }),
             ),
             const SizedBox(height: 10),
+            // Display the total cost of the courses in the cart
             Obx(() {
               double totalCost = courseController.cart
                   .fold(0, (sum, course) => sum + course.price);
@@ -89,6 +94,7 @@ class BookingPage extends StatelessWidget {
               );
             }),
             const SizedBox(height: 20),
+            // Text field for name input
             TextField(
               controller: nameController,
               decoration: const InputDecoration(
@@ -99,6 +105,7 @@ class BookingPage extends StatelessWidget {
                 ),
               ),
             ),
+            // Text field for email input
             TextField(
               controller: emailController,
               decoration: const InputDecoration(
@@ -109,6 +116,7 @@ class BookingPage extends StatelessWidget {
                 ),
               ),
             ),
+            // Text field for phone input
             TextField(
               controller: phoneController,
               decoration: const InputDecoration(
@@ -120,9 +128,11 @@ class BookingPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
+            // Button to confirm the booking
             Center(
               child: ElevatedButton(
                 onPressed: () async {
+                  // Check if all fields are filled
                   if (nameController.text.isEmpty ||
                       emailController.text.isEmpty ||
                       phoneController.text.isEmpty) {
@@ -137,12 +147,14 @@ class BookingPage extends StatelessWidget {
                   }
 
                   try {
+                    // Attempt to confirm the booking
                     await courseController.confirmBooking(
                       name: nameController.text,
                       email: emailController.text,
                       phone: phoneController.text,
                     );
                   } catch (e) {
+                    // Show error message if booking fails
                     Get.snackbar(
                       'Error',
                       'Failed to confirm booking',
