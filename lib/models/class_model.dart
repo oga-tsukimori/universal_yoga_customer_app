@@ -1,4 +1,3 @@
-// models/class_instance_model.dart
 class Class {
   String id;
   String courseId;

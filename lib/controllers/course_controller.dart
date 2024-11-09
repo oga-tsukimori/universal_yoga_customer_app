@@ -1,16 +1,15 @@
-// controllers/course_controller.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:math';
+import '../pages/home_page.dart';
 import '../models/course_model.dart';
 import '../models/class_model.dart';
 
 class CourseController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   var courses = <Course>[].obs;
-  var courseClasses =
-      <String, List<Class>>{}.obs; // Map to store classes for each course
+  var courseClasses = <String, List<Class>>{}.obs;
   var isLoading = false.obs;
   var searchResults = <Course>[].obs;
   var cart = <Course>[].obs;
@@ -113,9 +112,9 @@ class CourseController extends GetxController {
       backgroundColor: Colors.green,
       colorText: Colors.white,
     );
-
+    myCourses.addAll(cart);
     cart.clear();
-    Get.back();
+    Get.offAll(() => const HomePage());
   }
 
   void addDummyData() async {

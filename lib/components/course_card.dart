@@ -73,6 +73,11 @@ class CourseCard extends StatelessWidget {
               Obx(() {
                 final bool isCourseInCart =
                     courseController.cart.contains(course);
+                final bool isCourseBooked =
+                    courseController.myCourses.contains(course);
+                if (isCourseBooked) {
+                  return const SizedBox.shrink();
+                }
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
