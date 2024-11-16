@@ -1,3 +1,5 @@
+import 'class_model.dart';
+
 // A model class representing a Course.
 //
 // This class contains details about a course such as its id, day, time,
@@ -30,6 +32,9 @@ class Course {
   // A brief description of the course.
   String description;
 
+  // A list of classes associated with the course.
+  List<Class> classes = [];
+
   // Creates a new Course instance.
   //
   // All fields are required except for [description], which defaults to an
@@ -44,6 +49,7 @@ class Course {
     required this.type,
     this.name = '',
     this.description = '',
+    required this.classes,
   });
 
   // Creates a new Course instance from a map.
@@ -61,6 +67,9 @@ class Course {
       type: data['type'],
       description: data['description'] ?? '',
       name: data['name'] ?? '',
+      classes: (data['classes'] as List)
+          .map((item) => Class.fromMap(item, item['id']))
+          .toList(),
     );
   }
 
@@ -78,6 +87,7 @@ class Course {
       'type': type,
       'description': description,
       'name': name,
+      'classes': classes.map((item) => item.toMap()).toList(),
     };
   }
 
@@ -86,6 +96,6 @@ class Course {
   // This method is useful for debugging and logging purposes.
   @override
   String toString() {
-    return 'Course{id: $id, day: $day, time: $time, capacity: $capacity, duration: $duration, price: $price, type: $type, description: $description, name: $name}';
+    return 'Course{id: $id, day: $day, time: $time, capacity: $capacity, duration: $duration, price: $price, type: $type, description: $description, name: $name, classes: $classes}';
   }
 }

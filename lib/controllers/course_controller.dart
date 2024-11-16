@@ -48,13 +48,7 @@ class CourseController extends GetxController {
     courses.assignAll(courseList);
 
     for (var course in courseList) {
-      var classSnapshot = await _firestore
-          .collection('classes')
-          .where('courseId', isEqualTo: course.id)
-          .get();
-      var classList = classSnapshot.docs
-          .map((doc) => Class.fromMap(doc.data(), doc.id))
-          .toList();
+      var classList = course.classes;
       courseClasses[course.id] = classList;
     }
 
@@ -177,6 +171,23 @@ class CourseController extends GetxController {
     ];
 
     var dummyCourses = List.generate(5, (index) {
+      var classList = List.generate(3, (classIndex) {
+        DateTime randomDate = DateTime(
+          2023,
+          random.nextInt(12) + 1,
+          random.nextInt(28) + 1,
+          random.nextInt(24),
+          random.nextInt(60),
+        );
+        return Class(
+          id: classIndex,
+          name: 'Class ${classIndex + 1}',
+          date: randomDate.toIso8601String(),
+          image: 'null',
+          teacher: 'Teacher ${random.nextInt(100)}',
+        );
+      });
+
       return Course(
         id: '',
         day: days[random.nextInt(days.length)],
@@ -187,35 +198,12 @@ class CourseController extends GetxController {
         type: types[random.nextInt(types.length)],
         description: descriptions[random.nextInt(descriptions.length)],
         name: names[random.nextInt(names.length)],
+        classes: classList,
       );
     });
 
     for (var course in dummyCourses) {
-      var courseRef =
-          await _firestore.collection('courses').add(course.toMap());
-      var courseId = courseRef.id;
-
-      // Create random class instances for each course
-      for (int i = 0; i < 5; i++) {
-        DateTime randomDate = DateTime(
-          2023,
-          random.nextInt(12) + 1,
-          random.nextInt(28) + 1,
-          random.nextInt(24),
-          random.nextInt(60),
-        );
-        String randomTeacher = 'Teacher ${random.nextInt(100)}';
-        String randomName = 'Class ${random.nextInt(1000)}';
-
-        Class classInstance = Class(
-          id: '',
-          courseId: courseId,
-          date: randomDate.toIso8601String(),
-          teacher: randomTeacher,
-          name: randomName,
-        );
-        await _firestore.collection('classes').add(classInstance.toMap());
-      }
+      await _firestore.collection('courses').add(course.toMap());
     }
 
     fetchCoursesAndClasses(); // Refresh the course and class list

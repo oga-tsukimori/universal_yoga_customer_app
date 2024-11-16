@@ -4,10 +4,10 @@
 // course ID, date, teacher, and name.
 class Class {
   // The unique identifier for the class.
-  String id;
+  int id;
 
-  // The unique identifier for the course associated with the class.
-  String courseId;
+  // The image of the class.
+  String image;
 
   // The date of the class.
   String date;
@@ -23,7 +23,7 @@ class Class {
   // All parameters are required except for [name], which defaults to an empty string.
   Class({
     required this.id,
-    required this.courseId,
+    required this.image,
     required this.date,
     required this.teacher,
     this.name = '',
@@ -33,10 +33,10 @@ class Class {
   //
   // The [data] parameter is a map containing the class data, and the [id] parameter
   // is the unique identifier for the class.
-  factory Class.fromMap(Map<String, dynamic> data, String id) {
+  factory Class.fromMap(Map<String, dynamic> data, int id) {
     return Class(
       id: id,
-      courseId: data['courseId'],
+      image: data['image'],
       name: data['name'] ?? '',
       date: data['date'],
       teacher: data['teacher'],
@@ -49,7 +49,7 @@ class Class {
   // easily stored or transmitted.
   Map<String, dynamic> toMap() {
     return {
-      'courseId': courseId,
+      'image': image,
       'name': name,
       'date': date,
       'teacher': teacher,
