@@ -1,3 +1,5 @@
+import 'class_model.dart';
+
 // A model class representing a Course.
 //
 // This class contains details about a course such as its id, day, time,
@@ -24,8 +26,14 @@ class Course {
   // The type of the course (e.g., Yoga, Pilates).
   String type;
 
+  // A brief name of the course.
+  String name;
+
   // A brief description of the course.
   String description;
+
+  // A list of classes associated with the course.
+  List<Class> classes = [];
 
   // Creates a new Course instance.
   //
@@ -39,7 +47,9 @@ class Course {
     required this.duration,
     required this.price,
     required this.type,
+    this.name = '',
     this.description = '',
+    required this.classes,
   });
 
   // Creates a new Course instance from a map.
@@ -49,13 +59,19 @@ class Course {
   factory Course.fromMap(Map<String, dynamic> data, String id) {
     return Course(
       id: id,
-      day: data['day'],
-      time: data['time'],
-      capacity: data['capacity'],
-      duration: data['duration'],
-      price: data['price'],
-      type: data['type'],
+      day: data['day'] ?? '',
+      time: data['time'] ?? '',
+      capacity: data['capacity'] ?? 0,
+      duration: data['duration'] ?? 0,
+      price: data['price'] ?? 0.0,
+      type: data['type'] ?? '',
       description: data['description'] ?? '',
+      name: data['course_name'] ?? '',
+      classes: (data['classes'] as List)
+          .asMap()
+          .entries
+          .map((entry) => Class.fromMap(entry.value, entry.key.toString()))
+          .toList(),
     );
   }
 
@@ -72,6 +88,8 @@ class Course {
       'price': price,
       'type': type,
       'description': description,
+      'course_name': name,
+      'classes': classes.map((item) => item.toMap()).toList(),
     };
   }
 
@@ -80,6 +98,6 @@ class Course {
   // This method is useful for debugging and logging purposes.
   @override
   String toString() {
-    return 'Course{id: $id, day: $day, time: $time, capacity: $capacity, duration: $duration, price: $price, type: $type, description: $description}';
+    return 'Course{id: $id, day: $day, time: $time, capacity: $capacity, duration: $duration, price: $price, type: $type, description: $description, name: $name, classes: $classes}';
   }
 }

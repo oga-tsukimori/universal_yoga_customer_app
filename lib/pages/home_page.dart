@@ -133,12 +133,12 @@ class HomePageState extends State<HomePage> {
         onTap: _onItemTapped,
       ),
       // Uncomment the following lines to add a floating action button for adding dummy data.
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     courseController.addDummyData();
-      //   },
-      //   child: const Icon(Icons.add),
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          courseController.addDummyData();
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

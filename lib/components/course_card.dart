@@ -54,6 +54,15 @@ class CourseCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
+              course.name,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.pink,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
               course.description,
               style: const TextStyle(
                 fontSize: 18,
