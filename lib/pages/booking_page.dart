@@ -53,7 +53,7 @@ class BookingPage extends StatelessWidget {
                       color: Colors.pink[50],
                       child: ListTile(
                         title: Text(
-                          course.description,
+                          course.name,
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -63,6 +63,10 @@ class BookingPage extends StatelessWidget {
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Text(
+                              course.description,
+                              style: const TextStyle(color: Colors.pink),
+                            ),
                             Text(
                               'Date: ${course.day}',
                               style: const TextStyle(color: Colors.pink),

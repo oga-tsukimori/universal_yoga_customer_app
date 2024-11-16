@@ -72,6 +72,7 @@ class CourseController extends GetxController {
         var matchesCourse = course.type
                 .toLowerCase()
                 .contains(query.toLowerCase()) ||
+            course.name.toLowerCase().contains(query.toLowerCase()) ||
             course.description.toLowerCase().contains(query.toLowerCase()) ||
             course.day.toLowerCase().contains(query.toLowerCase()) ||
             course.time.toLowerCase().contains(query.toLowerCase());
@@ -98,7 +99,7 @@ class CourseController extends GetxController {
       cart.add(course);
       Get.snackbar(
         'Course Added',
-        '${course.description} has been added to your cart.',
+        '${course.name} has been added to your cart.',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.green,
         colorText: Colors.white,
@@ -113,7 +114,7 @@ class CourseController extends GetxController {
     cart.remove(course);
     Get.snackbar(
       'Course Removed',
-      '${course.description} has been removed from your cart.',
+      '${course.name} has been removed from your cart.',
       snackPosition: SnackPosition.BOTTOM,
       backgroundColor: Colors.red,
       colorText: Colors.white,

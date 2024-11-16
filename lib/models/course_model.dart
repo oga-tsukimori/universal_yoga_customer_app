@@ -24,6 +24,9 @@ class Course {
   // The type of the course (e.g., Yoga, Pilates).
   String type;
 
+  // A brief name of the course.
+  String name;
+
   // A brief description of the course.
   String description;
 
@@ -39,6 +42,7 @@ class Course {
     required this.duration,
     required this.price,
     required this.type,
+    this.name = '',
     this.description = '',
   });
 
@@ -56,6 +60,7 @@ class Course {
       price: data['price'],
       type: data['type'],
       description: data['description'] ?? '',
+      name: data['name'] ?? '',
     );
   }
 
@@ -72,6 +77,7 @@ class Course {
       'price': price,
       'type': type,
       'description': description,
+      'name': name,
     };
   }
 
@@ -80,6 +86,6 @@ class Course {
   // This method is useful for debugging and logging purposes.
   @override
   String toString() {
-    return 'Course{id: $id, day: $day, time: $time, capacity: $capacity, duration: $duration, price: $price, type: $type, description: $description}';
+    return 'Course{id: $id, day: $day, time: $time, capacity: $capacity, duration: $duration, price: $price, type: $type, description: $description, name: $name}';
   }
 }
