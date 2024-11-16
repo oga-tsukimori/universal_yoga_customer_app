@@ -161,6 +161,13 @@ class CourseController extends GetxController {
       'Power Yoga',
       'Restorative Yoga'
     ];
+    var names = [
+      'Sunrise Yoga',
+      'Evening Relaxation',
+      'Weekend Warrior',
+      'Midday Stretch',
+      'Zen Flow'
+    ];
     var descriptions = [
       'A relaxing flow yoga class.',
       'An exciting aerial yoga class.',
@@ -179,6 +186,7 @@ class CourseController extends GetxController {
         price: (random.nextInt(20) + 5).toDouble(),
         type: types[random.nextInt(types.length)],
         description: descriptions[random.nextInt(descriptions.length)],
+        name: names[random.nextInt(names.length)],
       );
     });
 
