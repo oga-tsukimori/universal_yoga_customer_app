@@ -8,32 +8,38 @@ class Course {
   // The unique identifier for the course.
   String id;
 
-  // The day the course is scheduled.
-  String day;
-
-  // The time the course is scheduled.
-  String time;
-
   // The maximum number of participants allowed in the course.
   int capacity;
 
-  // The duration of the course in minutes.
-  int duration;
-
-  // The price of the course.
-  double price;
-
   // The type of the course (e.g., Yoga, Pilates).
-  String type;
+  String classType;
+
+  // The unique identifier for the course.
+  int courseId;
 
   // A brief name of the course.
-  String name;
+  String courseName;
+
+  // The day of the week the course is scheduled.
+  String dayOfWeek;
 
   // A brief description of the course.
   String description;
 
+  // The duration of the course.
+  String duration;
+
   // A list of classes associated with the course.
-  List<Class> classes = [];
+  List<Class> itemList;
+
+  // The price of the course.
+  double pricing;
+
+  // The time of day the course is scheduled.
+  String timeOfDay;
+
+  // The timestamp of the course.
+  int timestamp;
 
   // Creates a new Course instance.
   //
@@ -41,15 +47,17 @@ class Course {
   // empty string if not provided.
   Course({
     required this.id,
-    required this.day,
-    required this.time,
     required this.capacity,
+    required this.classType,
+    required this.courseId,
+    required this.courseName,
+    required this.dayOfWeek,
+    required this.description,
     required this.duration,
-    required this.price,
-    required this.type,
-    this.name = '',
-    this.description = '',
-    required this.classes,
+    required this.itemList,
+    required this.pricing,
+    required this.timeOfDay,
+    required this.timestamp,
   });
 
   // Creates a new Course instance from a map.
@@ -59,17 +67,19 @@ class Course {
   factory Course.fromMap(Map<String, dynamic> data, String id) {
     return Course(
       id: id,
-      day: data['day'],
-      time: data['time'],
-      capacity: data['capacity'],
-      duration: data['duration'],
-      price: data['price'],
-      type: data['type'],
+      capacity: data['capacity'] ?? 0,
+      classType: data['classType'] ?? '',
+      courseId: data['courseId'] ?? 0,
+      courseName: data['courseName'] ?? '',
+      dayOfWeek: data['dayOfWeek'] ?? '',
       description: data['description'] ?? '',
-      name: data['name'] ?? '',
-      classes: (data['classes'] as List)
-          .map((item) => Class.fromMap(item, item['id']))
+      duration: data['duration'] ?? '0',
+      itemList: (data['itemList'] as List)
+          .map((item) => Class.fromMap(item))
           .toList(),
+      pricing: data['pricing'] ?? 0.0,
+      timeOfDay: data['timeOfDay'] ?? '',
+      timestamp: data['timestamp'] ?? 0,
     );
   }
 
@@ -79,15 +89,17 @@ class Course {
   // used for serialization.
   Map<String, dynamic> toMap() {
     return {
-      'day': day,
-      'time': time,
       'capacity': capacity,
-      'duration': duration,
-      'price': price,
-      'type': type,
+      'classType': classType,
+      'courseId': courseId,
+      'courseName': courseName,
+      'dayOfWeek': dayOfWeek,
       'description': description,
-      'name': name,
-      'classes': classes.map((item) => item.toMap()).toList(),
+      'duration': duration,
+      'itemList': itemList.map((item) => item.toMap()).toList(),
+      'pricing': pricing,
+      'timeOfDay': timeOfDay,
+      'timestamp': timestamp,
     };
   }
 
@@ -96,6 +108,6 @@ class Course {
   // This method is useful for debugging and logging purposes.
   @override
   String toString() {
-    return 'Course{id: $id, day: $day, time: $time, capacity: $capacity, duration: $duration, price: $price, type: $type, description: $description, name: $name, classes: $classes}';
+    return 'Course{id: $id, capacity: $capacity, classType: $classType, courseId: $courseId, courseName: $courseName, dayOfWeek: $dayOfWeek, description: $description, duration: $duration, itemList: $itemList, pricing: $pricing, timeOfDay: $timeOfDay, timestamp: $timestamp}';
   }
 }

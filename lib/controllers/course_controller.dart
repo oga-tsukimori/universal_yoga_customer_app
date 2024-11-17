@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../models/class_model.dart';
 import '../models/course_model.dart';
 import '../pages/home_page.dart';
@@ -48,7 +47,7 @@ class CourseController extends GetxController {
     courses.assignAll(courseList);
 
     for (var course in courseList) {
-      var classList = course.classes;
+      var classList = course.itemList;
       courseClasses[course.id] = classList;
     }
 
@@ -63,15 +62,18 @@ class CourseController extends GetxController {
       searchResults.assignAll(courses);
     } else {
       var filteredCourses = courses.where((course) {
-        var matchesCourse = course.type
+        var matchesCourse = course.classType
                 .toLowerCase()
                 .contains(query.toLowerCase()) ||
-            course.name.toLowerCase().contains(query.toLowerCase()) ||
+            course.courseName.toLowerCase().contains(query.toLowerCase()) ||
             course.description.toLowerCase().contains(query.toLowerCase()) ||
-            course.day.toLowerCase().contains(query.toLowerCase()) ||
-            course.time.toLowerCase().contains(query.toLowerCase());
+            course.dayOfWeek.toLowerCase().contains(query.toLowerCase()) ||
+            course.timeOfDay.toLowerCase().contains(query.toLowerCase());
         var matchesClass = courseClasses[course.id]?.any((classInstance) {
-              return classInstance.teacher
+              return classInstance.className
+                      .toLowerCase()
+                      .contains(query.toLowerCase()) ||
+                  classInstance.teacherName
                       .toLowerCase()
                       .contains(query.toLowerCase()) ||
                   classInstance.date
@@ -93,7 +95,7 @@ class CourseController extends GetxController {
       cart.add(course);
       Get.snackbar(
         'Course Added',
-        '${course.name} has been added to your cart.',
+        '${course.courseName} has been added to your cart.',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.green,
         colorText: Colors.white,
@@ -108,7 +110,7 @@ class CourseController extends GetxController {
     cart.remove(course);
     Get.snackbar(
       'Course Removed',
-      '${course.name} has been removed from your cart.',
+      '${course.courseName} has been removed from your cart.',
       snackPosition: SnackPosition.BOTTOM,
       backgroundColor: Colors.red,
       colorText: Colors.white,
@@ -125,12 +127,17 @@ class CourseController extends GetxController {
     required String email,
     required String phone,
   }) async {
-    await _firestore.collection('users').add({
-      'name': name,
-      'email': email,
-      'phone': phone,
-      'courses': cart.map((course) => course.id).toList(),
-    });
+    for (var course in cart) {
+      await _firestore.collection('courses').doc(course.id).update({
+        'users': FieldValue.arrayUnion([
+          {
+            'name': name,
+            'email': email,
+            'phone': phone,
+          }
+        ])
+      });
+    }
 
     Get.snackbar(
       'Success',
@@ -170,35 +177,38 @@ class CourseController extends GetxController {
       'A restorative yoga class.'
     ];
 
+    DateTime randomDate = DateTime(
+      2023,
+      random.nextInt(12) + 1,
+      random.nextInt(28) + 1,
+      random.nextInt(24),
+      random.nextInt(60),
+    );
     var dummyCourses = List.generate(5, (index) {
       var classList = List.generate(3, (classIndex) {
-        DateTime randomDate = DateTime(
-          2023,
-          random.nextInt(12) + 1,
-          random.nextInt(28) + 1,
-          random.nextInt(24),
-          random.nextInt(60),
-        );
         return Class(
-          id: classIndex,
-          name: 'Class ${classIndex + 1}',
+          classId: classIndex,
+          className: 'Class ${classIndex + 1}',
           date: randomDate.toIso8601String(),
           image: 'null',
-          teacher: 'Teacher ${random.nextInt(100)}',
+          teacherName: 'Teacher ${random.nextInt(100)}',
+          timestamp: randomDate.millisecondsSinceEpoch,
         );
       });
 
       return Course(
-        id: '',
-        day: days[random.nextInt(days.length)],
-        time: '${random.nextInt(12) + 1}:00',
+        id: '0',
+        courseId: 0,
+        dayOfWeek: days[random.nextInt(days.length)],
+        timeOfDay: '${random.nextInt(12) + 1}:00',
         capacity: random.nextInt(30) + 10,
-        duration: (random.nextInt(3) + 1) * 30,
-        price: (random.nextInt(20) + 5).toDouble(),
-        type: types[random.nextInt(types.length)],
+        duration: ((random.nextInt(3) + 1) * 30).toString(),
+        pricing: (random.nextInt(20) + 5).toDouble(),
+        classType: types[random.nextInt(types.length)],
         description: descriptions[random.nextInt(descriptions.length)],
-        name: names[random.nextInt(names.length)],
-        classes: classList,
+        courseName: names[random.nextInt(names.length)],
+        itemList: classList,
+        timestamp: randomDate.millisecondsSinceEpoch,
       );
     });
 

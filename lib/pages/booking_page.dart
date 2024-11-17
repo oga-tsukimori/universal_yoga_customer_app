@@ -53,7 +53,7 @@ class BookingPage extends StatelessWidget {
                       color: Colors.pink[50],
                       child: ListTile(
                         title: Text(
-                          course.name,
+                          course.courseName,
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -68,11 +68,11 @@ class BookingPage extends StatelessWidget {
                               style: const TextStyle(color: Colors.pink),
                             ),
                             Text(
-                              'Date: ${course.day}',
+                              'Date: ${course.dayOfWeek}',
                               style: const TextStyle(color: Colors.pink),
                             ),
                             Text(
-                              'Price: \$${course.price}',
+                              'Price: \$${course.pricing}',
                               style: const TextStyle(color: Colors.pink),
                             ),
                           ],
@@ -87,7 +87,7 @@ class BookingPage extends StatelessWidget {
             // Display the total cost of the courses in the cart
             Obx(() {
               double totalCost = courseController.cart
-                  .fold(0, (sum, course) => sum + course.price);
+                  .fold(0, (sum, course) => sum + course.pricing);
               return Text(
                 'Total Cost: \$${totalCost.toStringAsFixed(2)}',
                 style: const TextStyle(

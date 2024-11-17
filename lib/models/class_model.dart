@@ -2,44 +2,50 @@
 //
 // This class contains information about a specific class, including its ID,
 // course ID, date, teacher, and name.
+
 class Class {
   // The unique identifier for the class.
-  int id;
+  int classId;
 
-  // The image of the class.
-  String image;
+  // The name of the class.
+  String className;
 
   // The date of the class.
   String date;
 
-  // The name of the teacher conducting the class.
-  String teacher;
+  // The image of the class.
+  String image;
 
-  // The name of the class. Defaults to an empty string if not provided.
-  String name;
+  // The name of the teacher conduction the class.
+  String teacherName;
+
+  // The timestamp of the class.
+  int timestamp;
 
   // Creates a new instance of the [Class] model.
   //
   // All parameters are required except for [name], which defaults to an empty string.
   Class({
-    required this.id,
-    required this.image,
+    required this.classId,
+    required this.className,
     required this.date,
-    required this.teacher,
-    this.name = '',
+    required this.image,
+    required this.teacherName,
+    required this.timestamp,
   });
 
   // Creates a new instance of the [Class] model from a map of key-value pairs.
   //
   // The [data] parameter is a map containing the class data, and the [id] parameter
   // is the unique identifier for the class.
-  factory Class.fromMap(Map<String, dynamic> data, int id) {
+  factory Class.fromMap(Map<String, dynamic> data) {
     return Class(
-      id: id,
-      image: data['image'],
-      name: data['name'] ?? '',
+      classId: data['classId'],
+      className: data['className'],
       date: data['date'],
-      teacher: data['teacher'],
+      image: data['image'],
+      teacherName: data['teacherName'],
+      timestamp: data['timestamp'],
     );
   }
 
@@ -49,10 +55,12 @@ class Class {
   // easily stored or transmitted.
   Map<String, dynamic> toMap() {
     return {
-      'image': image,
-      'name': name,
+      'classId': classId,
+      'className': className,
       'date': date,
-      'teacher': teacher,
+      'image': image,
+      'teacherName': teacherName,
+      'timestamp': timestamp,
     };
   }
 }

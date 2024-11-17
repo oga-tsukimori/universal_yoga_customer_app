@@ -54,7 +54,7 @@ class CourseCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              course.name,
+              course.courseName,
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -73,7 +73,7 @@ class CourseCard extends StatelessWidget {
             const SizedBox(height: 10),
             if (courseClasses.isNotEmpty) ...[
               Text(
-                'Every ${course.day}!',
+                'Every ${course.dayOfWeek}!',
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -94,7 +94,7 @@ class CourseCard extends StatelessWidget {
               }),
               const SizedBox(height: 10),
               Text(
-                'Special Sales... \$${course.price} Only per member!',
+                'Special Sales... \$${course.pricing} Only per member!',
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
