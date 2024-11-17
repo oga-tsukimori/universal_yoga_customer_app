@@ -70,7 +70,10 @@ class CourseController extends GetxController {
             course.dayOfWeek.toLowerCase().contains(query.toLowerCase()) ||
             course.timeOfDay.toLowerCase().contains(query.toLowerCase());
         var matchesClass = courseClasses[course.id]?.any((classInstance) {
-              return classInstance.teacherName
+              return classInstance.className
+                      .toLowerCase()
+                      .contains(query.toLowerCase()) ||
+                  classInstance.teacherName
                       .toLowerCase()
                       .contains(query.toLowerCase()) ||
                   classInstance.date
@@ -124,12 +127,17 @@ class CourseController extends GetxController {
     required String email,
     required String phone,
   }) async {
-    await _firestore.collection('users').add({
-      'name': name,
-      'email': email,
-      'phone': phone,
-      'courses': cart.map((course) => course.id).toList(),
-    });
+    for (var course in cart) {
+      await _firestore.collection('courses').doc(course.id).update({
+        'users': FieldValue.arrayUnion([
+          {
+            'name': name,
+            'email': email,
+            'phone': phone,
+          }
+        ])
+      });
+    }
 
     Get.snackbar(
       'Success',
