@@ -1,58 +1,39 @@
-// A model class representing a Class entity.
-//
-// This class contains information about a specific class, including its ID,
-// course ID, date, teacher, and name.
 class Class {
-  // The unique identifier for the class.
-  String id;
-
-  // The image of the class.
-  String image;
-
-  // The date of the class.
+  int classId;
+  String className;
   String date;
+  String image;
+  String teacherName;
+  int timestamp;
 
-  // The name of the teacher conducting the class.
-  String teacher;
-
-  // The name of the class. Defaults to an empty string if not provided.
-  String name;
-
-  // Creates a new instance of the [Class] model.
-  //
-  // All parameters are required except for [name], which defaults to an empty string.
   Class({
-    required this.id,
-    required this.image,
+    required this.classId,
+    required this.className,
     required this.date,
-    required this.teacher,
-    this.name = '',
+    required this.image,
+    required this.teacherName,
+    required this.timestamp,
   });
 
-  // Creates a new instance of the [Class] model from a map of key-value pairs.
-  //
-  // The [data] parameter is a map containing the class data, and the [id] parameter
-  // is the unique identifier for the class.
-  factory Class.fromMap(Map<String, dynamic> data, String id) {
+  factory Class.fromMap(Map<String, dynamic> data) {
     return Class(
-      id: id,
-      image: data['image'],
-      name: data['class_name'] ?? '',
+      classId: data['classId'],
+      className: data['className'],
       date: data['date'],
-      teacher: data['teacher'],
+      image: data['image'],
+      teacherName: data['teacherName'],
+      timestamp: data['timestamp'],
     );
   }
 
-  // Converts the [Class] instance to a map of key-value pairs.
-  //
-  // This method is useful for serializing the class data to a format that can be
-  // easily stored or transmitted.
   Map<String, dynamic> toMap() {
     return {
-      'image': image,
-      'class_name': name,
+      'classId': classId,
+      'className': className,
       'date': date,
-      'teacher': teacher,
+      'image': image,
+      'teacherName': teacherName,
+      'timestamp': timestamp,
     };
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../models/class_model.dart';
 
@@ -61,7 +60,7 @@ class ClassCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              classInstance.name,
+              classInstance.className,
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -73,24 +72,13 @@ class ClassCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Tr. ${classInstance.teacher}',
+                  'Tr. ${classInstance.teacherName}',
                   style: const TextStyle(color: Colors.pink),
                 ),
-                Row(
-                  children: [
-                    Text(
-                      classInstance.date.split('T').first,
-                      style: const TextStyle(color: Colors.pink),
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      DateFormat.jm().format(
-                        DateTime.parse(classInstance.date),
-                      ),
-                      style: const TextStyle(color: Colors.pink),
-                    ),
-                  ],
-                )
+                Text(
+                  classInstance.date,
+                  style: const TextStyle(color: Colors.pink),
+                ),
               ],
             ),
           ],
